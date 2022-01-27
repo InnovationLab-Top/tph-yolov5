@@ -21,6 +21,7 @@ import numpy as np
 import torch
 import torch.distributed as dist
 import torch.nn as nn
+import valohai
 import yaml
 from torch.cuda import amp
 from torch.nn.parallel import DistributedDataParallel as DDP
@@ -476,6 +477,7 @@ def parse_opt(known=False):
     parser.add_argument('--freeze', type=int, default=0, help='Number of layers to freeze. backbone=10, all=24')
     parser.add_argument('--save-period', type=int, default=-1, help='Save checkpoint every x epochs (disabled if < 1)')
     parser.add_argument('--local_rank', type=int, default=-1, help='DDP parameter, do not modify')
+    
 
     # Weights & Biases arguments
     parser.add_argument('--entity', default=None, help='W&B: Entity')
