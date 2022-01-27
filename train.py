@@ -495,7 +495,15 @@ def main(opt, callbacks=Callbacks()):
         print_args(FILE.stem, opt)
         check_git_status()
         check_requirements(exclude=['thop'])
+    
+    valohai.inputs("heridal").paths(process_archives=False)
+    heridal_zip_path = next(archive_path_list)
+    print(heridal_zip_path)
 
+    with zipfile.ZipFile(heridal_zip_path) as heridal_zip_file:
+       heridal_zip_file.extractall('/tmp/heridal')
+    
+    opt.data = "/tmp/heridal/heridal/coco.yaml"
     # Resume
     if opt.resume and not check_wandb_resume(opt) and not opt.evolve:  # resume an interrupted run
         ckpt = opt.resume if isinstance(opt.resume, str) else get_latest_run()  # specified or most recent path
