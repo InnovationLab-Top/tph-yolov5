@@ -814,7 +814,7 @@ def apply_classifier(x, model, img, im0):
     return x
 
 
-def save_one_box(xyxy, im, file='image.jpg', gain=1.02, pad=10, square=False, BGR=False, save=True):
+def save_one_box(counter, xyxy, im, file='image.jpg', gain=1.02, pad=10, square=False, BGR=False, save=True):
     # Save image crop as {file} with crop size multiple {gain} and {pad} pixels. Save and/or return crop
     xyxy = torch.tensor(xyxy).view(-1, 4)
     b = xyxy2xywh(xyxy)  # boxes
@@ -824,8 +824,14 @@ def save_one_box(xyxy, im, file='image.jpg', gain=1.02, pad=10, square=False, BG
     xyxy = xywh2xyxy(b).long()
     clip_coords(xyxy, im.shape)
     crop = im[int(xyxy[0, 1]):int(xyxy[0, 3]), int(xyxy[0, 0]):int(xyxy[0, 2]), ::(1 if BGR else -1)]
+    
+    file_str = str(file)
+    dir_path = file_str[:file_str.index(".")]
+    if not os.path.exists(dir_path):
+        os.makedirs(dir_path)
+
     if save:
-        cv2.imwrite(str(increment_path(file, mkdir=True).with_suffix('.jpg')), crop)
+        cv2.imwrite(os.path.join(dir_path, str(counter) + ".jpg"), crop)
     return crop
 
 
